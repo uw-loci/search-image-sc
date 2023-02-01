@@ -73,6 +73,9 @@ search.addWidgets([
       function weightedDistance(q, a, b) {
         var aDist = levenshteinDistance(q, a);
         var bDist = levenshteinDistance(q, b);
+        // penalize substring matches
+        aDist += Math.abs(q.length - a.length);
+        bDist += Math.abs(q.length - b.length);
         var aIndex = a.indexOf(q);
         var bIndex = b.indexOf(q);
         // penalize fuzzy matches
