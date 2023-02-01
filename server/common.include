@@ -1,0 +1,37 @@
+#!/bin/sh
+
+# Commonly useful constants and functions. Include via:
+#
+#     . "${0%/*}/common.include"
+
+set -e
+
+TYPESENSE_API_KEY=$(cat /etc/typesense/typesense-server.ini | grep api-key | sed 's/.* = //')
+TYPESENSE_SERVER="https://search.image.sc:8108"
+
+json_output() {
+  if [ "$1" ]
+  then
+    printf '%s\n' "$1" | json_pp
+  else
+    echo "<Empty document>"
+  fi
+}
+
+ts_get() {
+  json_output "$(curl -sS "$TYPESENSE_SERVER/$1" \
+    -H "X-TYPESENSE-API-KEY: $TYPESENSE_API_KEY" -X GET)"
+}
+
+ts_post() {
+  json_output "$(curl -sS "$TYPESENSE_SERVER/$1" \
+    -H "X-TYPESENSE-API-KEY: $TYPESENSE_API_KEY" \
+    -H 'Content-Type: application/json' \
+    -X POST -d "$2")"
+}
+
+ts_delete() {
+  json_output "$(curl -sS "$TYPESENSE_SERVER/$1" \
+    -H "X-TYPESENSE-API-KEY: ${TYPESENSE_API_KEY}" \
+    -X DELETE)"
+}
