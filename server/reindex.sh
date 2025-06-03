@@ -7,7 +7,7 @@ TYPESENSE_CACHE_DIR="$HOME/.cache/typesense"
 
 dir=$(cd "${0%/*}" && pwd)
 
-pip install --user -r "$dir/requirements.txt"
+pip install --break-system-packages --user -r "$dir/requirements.txt"
 
 cat "$dir/../sources" | while read source
 do
